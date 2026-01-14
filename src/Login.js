@@ -33,8 +33,8 @@ function Login({ onLogin }) {
         <div className="col-md-6 col-lg-4">
           <div className="card shadow">
             <div className="card-body">
-              <h1 className="card-title text-center mb-4">Daily Stand-Up Login</h1>
-              <form>
+              <h3 className="card-title text-center mb-4">Daily Stand-Up Login</h3>
+              <form className="mt-5">
                 <div className="mb-3">
                   <input
                     type="email"
@@ -53,7 +53,7 @@ function Login({ onLogin }) {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className="d-grid gap-2">
+                <div className="d-grid gap-2 mb-4">
                   <button onClick={handleLogin} className="btn btn-primary">
                     Login
                   </button>
