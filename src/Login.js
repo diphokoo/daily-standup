@@ -28,31 +28,45 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Login</h2>
-      <form>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: '100%', padding: '10px', margin: '10px 0' }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: '100%', padding: '10px', margin: '10px 0' }}
-        />
-        <button onClick={handleLogin} style={{ padding: '10px 20px', margin: '5px' }}>
-          Login
-        </button>
-        <button onClick={handleSignup} style={{ padding: '10px 20px', margin: '5px' }}>
-          Sign Up
-        </button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-4">
+          <div className="card shadow">
+            <div className="card-body">
+              <h1 className="card-title text-center mb-4">Daily Stand-Up Login</h1>
+              <form>
+                <div className="mb-3">
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="mb-3">
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <div className="d-grid gap-2">
+                  <button onClick={handleLogin} className="btn btn-primary">
+                    Login
+                  </button>
+                  <button onClick={handleSignup} className="btn btn-secondary">
+                    Sign Up
+                  </button>
+                </div>
+              </form>
+              {error && <div className="alert alert-danger mt-3" role="alert">{error}</div>}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
