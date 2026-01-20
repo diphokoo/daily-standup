@@ -1,21 +1,33 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from './firebase';
 
-function Login({ onLogin, onShowRegister }) {
+function Register({ onBackToLogin }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      onLogin();
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: name });
+      
+      // Store user data in Firestore
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        name: name,
+        email: email,
+        createdAt: new Date()
+      });
     } catch (err) {
       setError(err.message);
     }
   };
+
+
 
   return (
     <div className="container mt-5">
@@ -23,8 +35,17 @@ function Login({ onLogin, onShowRegister }) {
         <div className="col-md-6 col-lg-4">
           <div className="card shadow">
             <div className="card-body">
-              <h3 className="card-title text-center mb-4">Daily Stand-Up Login</h3>
-              <form className="mt-5">
+              <h3 className="card-title text-center mb-4">Register</h3>
+              <form>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
                 <div className="mb-3">
                   <input
                     type="email"
@@ -44,11 +65,11 @@ function Login({ onLogin, onShowRegister }) {
                   />
                 </div>
                 <div className="d-grid gap-2">
-                  <button onClick={handleLogin} className="btn btn-primary">
-                    Login
+                  <button onClick={handleRegister} className="btn btn-primary">
+                    Register
                   </button>
-                  <button onClick={onShowRegister} className="btn btn-outline-primary">
-                    Create an account
+                  <button onClick={onBackToLogin} className="btn btn-outline-primary">
+                    Back to Login
                   </button>
                 </div>
               </form>
@@ -61,4 +82,4 @@ function Login({ onLogin, onShowRegister }) {
   );
 }
 
-export default Login;
+export default Register;

@@ -2,31 +2,82 @@ import { useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
 import Login from './Login';
+import Register from './Register';
+import DeleteTestData from './DeleteTestData';
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [showRegister, setShowRegister] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      if (currentUser && !showSuccessModal) {
+        // If user just registered, show modal instead of logging in
+        if (showRegister) {
+          setShowSuccessModal(true);
+          auth.signOut();
+        } else {
+          setUser(currentUser);
+        }
+      } else if (!currentUser) {
+        setUser(null);
+      }
+      setLoading(false);
     });
     return unsubscribe;
-  }, []);
+  }, [showRegister, showSuccessModal]);
 
   const handleLogout = () => signOut(auth);
 
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    setShowRegister(false);
+  };
+
+  if (loading) return null;
+
+  if (showSuccessModal) {
+    return (
+      <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title text-success">Success!</h5>
+            </div>
+            <div className="modal-body text-center">
+              <p className="fs-5">You've successfully registered.</p>
+              <p>Now log in</p>
+            </div>
+            <div className="modal-footer">
+              <button onClick={handleCloseModal} className="btn btn-primary">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
-    return <Login onLogin={() => {}} />;
+    return showRegister ? 
+      <Register onBackToLogin={() => setShowRegister(false)} /> : 
+      <Login onLogin={() => {}} onShowRegister={() => setShowRegister(true)} />;
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome, {user.email}</h1>
-        <button onClick={handleLogout}>Logout</button>
-      </header>
-    </div>
+    <>
+      <div className="App">
+        <header className="App-header">
+          <h1>Welcome, {user.displayName || user.email}</h1>
+          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
+        </header>
+      </div>
+      <DeleteTestData />
+    </>
   );
 }
 
