@@ -3,7 +3,12 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
 import Login from './Login';
 import Register from './Register';
-import DeleteTestData from './DeleteTestData';
+import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
+import Projects from './pages/Projects';
+import DailyEntries from './pages/DailyEntries';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 import './App.css';
 
 function App() {
@@ -11,6 +16,7 @@ function App() {
   const [showRegister, setShowRegister] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState('dashboard');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -68,16 +74,24 @@ function App() {
       <Login onLogin={() => {}} onShowRegister={() => setShowRegister(true)} />;
   }
 
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard': return <Dashboard />;
+      case 'projects': return <Projects />;
+      case 'daily-entries': return <DailyEntries />;
+      case 'reports': return <Reports />;
+      case 'settings': return <Settings />;
+      default: return <Dashboard />;
+    }
+  };
+
   return (
-    <>
-      <div className="App">
-        <header className="App-header">
-          <h1>Welcome, {user.displayName || user.email}</h1>
-          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
-        </header>
+    <div className="d-flex">
+      <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
+      <div className="flex-grow-1">
+        {renderPage()}
       </div>
-      <DeleteTestData />
-    </>
+    </div>
   );
 }
 
