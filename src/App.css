@@ -20,6 +20,10 @@ body {
   background-color: #536173 !important;
 }
 
+.loggedInContent {
+  background-color: #f7fafd;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
