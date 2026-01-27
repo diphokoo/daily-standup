@@ -88,7 +88,7 @@ function App() {
   return (
     <div className="d-flex">
       <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
-      <div className="flex-grow-1">
+      <div className="flex-grow-1 loggedInContent">
         {renderPage()}
       </div>
     </div>
