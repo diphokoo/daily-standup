@@ -11,6 +11,15 @@ body {
   pointer-events: none;
 }
 
+.sidebar {
+  background-color: #415163;
+  color: white;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #536173 !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
