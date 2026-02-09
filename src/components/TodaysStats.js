@@ -1,7 +1,7 @@
 function TodaysStats() {
   return (
     <div className="d-flex gap-3 mb-4">
-      <div className="col-md-7 card rounded p-3 shadow">
+      <div className="col-md-7 card rounded p-3 shadow border-0">
         <h5>Today's Stats</h5>
 
         <div className="d-flex gap-3 mt-3">
@@ -20,7 +20,7 @@ function TodaysStats() {
         </div>
       </div>
 
-      <div className="col-md-5 card rounded p-3 shadow">
+      <div className="col-md-5 card rounded p-3 shadow border-0">
           <h5>Daily Entries</h5>
 
           <h6 className="mt-3"> Gave updates to the team </h6>
