@@ -1,8 +1,21 @@
+import ProjectList from '../components/ProjectList';
+import ProjectTimeline from '../components/ProjectTimeline';
+import ProjectStats from '../components/ProjectStats';
+
 function Projects() {
   return (
     <div className="p-4">
-      <h2>Projects</h2>
-      <p>Manage projects here.</p>
+      <div className='mb-4 p-2 rounded d-flex justify-content-between align-items-center'>
+        <h3 className="mb-4 text-start">Projects</h3>
+        <button className="btn btn-primary text-end">
+          <i className="bi bi-plus-lg me-2"></i>
+          New Project
+        </button>
+      </div>
+      
+      <ProjectList />
+      <ProjectTimeline />
+      <ProjectStats />
     </div>
   );
 }
