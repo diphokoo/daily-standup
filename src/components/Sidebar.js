@@ -13,7 +13,7 @@ function Sidebar({ currentPage, onPageChange }) {
   const handleLogout = () => signOut(auth);
 
   return (
-    <div className="d-flex flex-column sidebar" style={{ width: '12rem', height: '100vh' }}>
+    <div className="d-flex flex-column sidebar position-fixed" style={{ width: '12rem', height: '100vh' }}>
       <div className="p-3">
         <h5>Daily Standup</h5>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import Login from './Login';
 import Register from './Register';
@@ -35,8 +35,6 @@ function App() {
     });
     return unsubscribe;
   }, [showRegister, showSuccessModal]);
-
-  const handleLogout = () => signOut(auth);
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
@@ -88,7 +86,7 @@ function App() {
   return (
     <div className="d-flex">
       <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
-      <div className="flex-grow-1 loggedInContent">
+      <div className="flex-grow-1" style={{ marginLeft: '12rem', height: '100vh', overflowY: 'auto' }}>
         {renderPage()}
       </div>
     </div>
