@@ -1,6 +1,5 @@
 import ProjectList from '../components/ProjectList';
 import ProjectTimeline from '../components/ProjectTimeline';
-import ProjectStats from '../components/ProjectStats';
 
 function Projects() {
   return (
