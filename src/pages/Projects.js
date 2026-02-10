@@ -15,7 +15,6 @@ function Projects() {
       
       <ProjectList />
       <ProjectTimeline />
-      <ProjectStats />
     </div>
   );
 }

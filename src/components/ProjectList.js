@@ -3,7 +3,7 @@ function ProjectList() {
     {
       id: 1,
       name: 'Project Alpha',
-      createdDate: 'Mar 28, 2024',
+      createdDate: 'Mar 28, 2025',
       description: 'Developing an analytics and insight dashboard',
       status: 'In Progress',
       statusColor: 'bg-primary',
@@ -13,7 +13,7 @@ function ProjectList() {
     {
       id: 2,
       name: 'Project Beta',
-      createdDate: 'Feb 15, 2024',
+      createdDate: 'Feb 15, 2025',
       description: 'Building a customer management system',
       status: 'Completed',
       statusColor: 'bg-success',
@@ -23,7 +23,7 @@ function ProjectList() {
     {
       id: 3,
       name: 'Project Gamma',
-      createdDate: 'Apr 10, 2024',
+      createdDate: 'Apr 10, 2025',
       description: 'Implementing automated testing framework',
       status: 'Overdue',
       statusColor: 'bg-danger',
@@ -36,7 +36,7 @@ function ProjectList() {
     <div className="mb-4">
       <div className="d-flex gap-3">
         {projects.map(project => (
-          <div key={project.id} className="card flex-fill p-3">
+          <div key={project.id} className="card flex-fill border-0 shadow rounded p-3">
             <h5>{project.name}</h5>
             <span className="text-muted mt-3">
               Created {project.createdDate}
