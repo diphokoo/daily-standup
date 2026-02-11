@@ -1,7 +1,10 @@
+import EntriesSummary from '../components/EntriesSummary';
+import Entries from '../components/Entries';
+
 function DailyEntries() {
   return (
     <div className="p-4">
-      <div className="d-flex justify-content-between align-items-center">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="text-start mt-2">
           Daily Entries
         </h4>
@@ -10,7 +13,9 @@ function DailyEntries() {
           New Entry
         </button>
       </div>
-      <span className="text-muted">Tracking over 14-day period</span>
+      <span className="text-muted d-block mb-4">Tracking over 14-day period</span>
+      <EntriesSummary />
+      <Entries />
     </div>
   );
 }
