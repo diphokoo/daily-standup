@@ -8,7 +8,7 @@ function EntriesSummary() {
   return (
     <div className="d-flex gap-3 mb-4">
       {summary.map((item, index) => (
-        <div key={index} className="card border-0 flex-fill p-3">
+        <div key={index} className="card border-0 shadow flex-fill p-3">
           <div className="d-flex align-items-center gap-3 mb-2">
             <i className={`${item.icon} ${item.iconColor}`} style={{ fontSize: '1.2rem' }}></i>
             <h3 className="mb-0">{item.value}</h3>
