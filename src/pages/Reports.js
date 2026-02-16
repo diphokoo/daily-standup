@@ -110,7 +110,7 @@ function Reports() {
       <span className="text-muted d-block subText mb-4">Tracking over 10 working days</span>
       <CurrentStatus selectedSprint={selectedSprint} sprintDates={sprintDates} />
       <SprintCompletion selectedSprint={selectedSprint} sprintDates={sprintDates} />
-      <SprintProgress />
+      <SprintProgress selectedSprint={selectedSprint} sprintDates={sprintDates} />
     </div>
   );
 }
