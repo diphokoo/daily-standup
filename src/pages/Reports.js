@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import CurrentStatus from '../components/CurrentStatus';
+import SprintCompletion from '../components/SprintCompletion';
+import SprintProgress from '../components/SprintProgress';
 
 function Reports() {
   const sprintStartDate = new Date('2026-02-02T00:00:00+02:00'); // Monday, 2 Feb 2026 SAST
@@ -96,7 +99,10 @@ function Reports() {
           </button>
         </div>
       </div>
-      <span className="text-muted d-block subText">Tracking over 10 working days</span>
+      <span className="text-muted d-block subText mb-4">Tracking over 10 working days</span>
+      <CurrentStatus />
+      <SprintCompletion />
+      <SprintProgress />
     </div>
   );
 }
