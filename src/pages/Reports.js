@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import CurrentStatus from '../components/CurrentStatus';
 import SprintCompletion from '../components/SprintCompletion';
 import SprintProgress from '../components/SprintProgress';
@@ -66,6 +66,17 @@ function Reports() {
   const [selectedSprint, setSelectedSprint] = useState(currentSprintNumber);
   const [sprintDateRange, setSprintDateRange] = useState('');
   
+  const sprintDates = useMemo(() => {
+    const sprint = sprints.find(s => s.number === parseInt(selectedSprint));
+    if (sprint) {
+      return { 
+        startDate: sprint.startDate.toISOString(), 
+        endDate: sprint.endDate.toISOString() 
+      };
+    }
+    return null;
+  }, [selectedSprint, sprints]);
+  
   useEffect(() => {
     const sprint = sprints.find(s => s.number === parseInt(selectedSprint));
     if (sprint) {
@@ -97,8 +108,8 @@ function Reports() {
         </div>
       </div>
       <span className="text-muted d-block subText mb-4">Tracking over 10 working days</span>
-      <CurrentStatus selectedSprint={selectedSprint} />
-      <SprintCompletion />
+      <CurrentStatus selectedSprint={selectedSprint} sprintDates={sprintDates} />
+      <SprintCompletion selectedSprint={selectedSprint} sprintDates={sprintDates} />
       <SprintProgress />
     </div>
   );

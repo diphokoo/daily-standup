@@ -1,15 +1,55 @@
 import { useState, useEffect } from 'react';
 import sprintData from '../data/sprintData.json';
 
-function CurrentStatus({ selectedSprint }) {
+function CurrentStatus({ selectedSprint, sprintDates }) {
   const [data, setData] = useState(null);
+  const [previousData, setPreviousData] = useState(null);
 
   useEffect(() => {
     const sprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
-    setData(sprint || sprintData.sprints[sprintData.sprints.length - 1]);
-  }, [selectedSprint]);
+    const prevSprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint) - 1);
+    
+    if (sprint && sprintDates) {
+      const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Africa/Johannesburg' }));
+      today.setHours(0, 0, 0, 0);
+      
+      let currentDate = new Date(sprintDates.startDate);
+      const endDate = new Date(sprintDates.endDate);
+      let dataIndex = 0;
+      let totalCompleted = 0;
+      let totalBlockers = 0;
+      let workingDaysPassed = 0;
+      
+      while (currentDate <= endDate && currentDate <= today) {
+        const dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+          const dayData = sprint.dailyData[dataIndex] || { completed: 0, blockers: 0 };
+          totalCompleted += dayData.completed;
+          totalBlockers += dayData.blockers;
+          workingDaysPassed++;
+          dataIndex++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      
+      const tasksPostponed = sprint.totalTasks - totalCompleted - sprint.tasksToDo;
+      const avgTasksPerDay = workingDaysPassed > 0 ? (totalCompleted / workingDaysPassed).toFixed(1) : 0;
+      
+      setData({ 
+        ...sprint, 
+        tasksCompleted: totalCompleted, 
+        blockers: totalBlockers,
+        tasksPostponed,
+        avgTasksPerDay 
+      });
+    } else if (sprint) {
+      setData(sprint);
+    }
+    
+    setPreviousData(prevSprint);
+  }, [selectedSprint, sprintDates]);
 
-  if (!data) return null;
+  if (!data || !previousData) return null;
 
   const cards = [
     {
