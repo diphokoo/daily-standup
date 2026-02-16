@@ -1,0 +1,40 @@
+{
+  "sprints": [
+    {
+      "sprintNumber": 1,
+      "tasksCompleted": 58,
+      "changeFromPrevious": "+2.5",
+      "tasksToDo": 15,
+      "newThisSprint": 12,
+      "blockers": 10,
+      "repeatBlockers": 3,
+      "repeatBlockersChange": "+1.8",
+      "moreDownErrors": 7.5,
+      "completionRate": "65%"
+    },
+    {
+      "sprintNumber": 2,
+      "tasksCompleted": 62,
+      "changeFromPrevious": "+2.5",
+      "tasksToDo": 18,
+      "newThisSprint": 15,
+      "blockers": 12,
+      "repeatBlockers": 4,
+      "repeatBlockersChange": "+2.5",
+      "moreDownErrors": 8.9,
+      "completionRate": "70%"
+    },
+    {
+      "sprintNumber": 3,
+      "tasksCompleted": 70,
+      "changeFromPrevious": "+3.2",
+      "tasksToDo": 20,
+      "newThisSprint": 18,
+      "blockers": 8,
+      "repeatBlockers": 2,
+      "repeatBlockersChange": "+1.2",
+      "moreDownErrors": 6.5,
+      "completionRate": "75%"
+    }
+  ]
+}

@@ -94,13 +94,10 @@ function Reports() {
               </option>
             ))}
           </select>
-          <button className="btn btn-primary">
-            Generate
-          </button>
         </div>
       </div>
       <span className="text-muted d-block subText mb-4">Tracking over 10 working days</span>
-      <CurrentStatus />
+      <CurrentStatus selectedSprint={selectedSprint} />
       <SprintCompletion />
       <SprintProgress />
     </div>
