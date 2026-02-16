@@ -1,0 +1,85 @@
+{
+  "sprints": [
+    {
+      "sprintNumber": 1,
+      "tasksCompleted": 58,
+      "changeFromPrevious": "+2.5",
+      "tasksToDo": 15,
+      "newThisSprint": 12,
+      "blockers": 10,
+      "repeatBlockers": 3,
+      "repeatBlockersChange": "+1.8",
+      "moreDownErrors": 7.5,
+      "completionRate": "65%",
+      "tasksPostponed": 8,
+      "totalTasks": 81,
+      "avgTasksPerDay": 5.8,
+      "dailyData": [
+        { "day": "Mon", "completed": 5, "blockers": 2 },
+        { "day": "Tue", "completed": 8, "blockers": 1 },
+        { "day": "Wed", "completed": 6, "blockers": 2 },
+        { "day": "Thu", "completed": 7, "blockers": 1 },
+        { "day": "Fri", "completed": 5, "blockers": 1 },
+        { "day": "Mon", "completed": 6, "blockers": 1 },
+        { "day": "Tue", "completed": 7, "blockers": 0 },
+        { "day": "Wed", "completed": 5, "blockers": 1 },
+        { "day": "Thu", "completed": 5, "blockers": 1 },
+        { "day": "Fri", "completed": 4, "blockers": 0 }
+      ]
+    },
+    {
+      "sprintNumber": 2,
+      "tasksCompleted": 62,
+      "changeFromPrevious": "+2.5",
+      "tasksToDo": 18,
+      "newThisSprint": 15,
+      "blockers": 12,
+      "repeatBlockers": 4,
+      "repeatBlockersChange": "+2.5",
+      "moreDownErrors": 8.9,
+      "completionRate": "70%",
+      "tasksPostponed": 10,
+      "totalTasks": 92,
+      "avgTasksPerDay": 6.2,
+      "dailyData": [
+        { "day": "Mon", "completed": 6, "blockers": 2 },
+        { "day": "Tue", "completed": 7, "blockers": 2 },
+        { "day": "Wed", "completed": 8, "blockers": 1 },
+        { "day": "Thu", "completed": 6, "blockers": 2 },
+        { "day": "Fri", "completed": 5, "blockers": 1 },
+        { "day": "Mon", "completed": 7, "blockers": 1 },
+        { "day": "Tue", "completed": 6, "blockers": 1 },
+        { "day": "Wed", "completed": 7, "blockers": 1 },
+        { "day": "Thu", "completed": 5, "blockers": 1 },
+        { "day": "Fri", "completed": 5, "blockers": 0 }
+      ]
+    },
+    {
+      "sprintNumber": 3,
+      "tasksCompleted": 70,
+      "changeFromPrevious": "+3.2",
+      "tasksToDo": 20,
+      "newThisSprint": 18,
+      "blockers": 8,
+      "repeatBlockers": 2,
+      "repeatBlockersChange": "+1.2",
+      "moreDownErrors": 6.5,
+      "completionRate": "75%",
+      "tasksPostponed": 6,
+      "totalTasks": 98,
+      "avgTasksPerDay": 7.0,
+      "dailyData": [
+        { "day": "Mon", "completed": 7, "blockers": 1 },
+        { "day": "Tue", "completed": 8, "blockers": 1 },
+        { "day": "Wed", "completed": 7, "blockers": 1 },
+        { "day": "Thu", "completed": 8, "blockers": 1 },
+        { "day": "Fri", "completed": 6, "blockers": 1 },
+        { "day": "Mon", "completed": 7, "blockers": 1 },
+        { "day": "Tue", "completed": 8, "blockers": 1 },
+        { "day": "Wed", "completed": 7, "blockers": 1 },
+        { "day": "Thu", "completed": 6, "blockers": 0 },
+        { "day": "Fri", "completed": 6, "blockers": 0 }
+      ]
+    }
+  ]
+}
