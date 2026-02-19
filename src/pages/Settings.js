@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
+import sprintData from '../data/sprintData.json';
 
 function Settings() {
   const [settings, setSettings] = useState({
@@ -39,7 +40,7 @@ function Settings() {
 
   return (
     <div className="container py-4">
-      <h1 className="h3 mb-4">Settings</h1>
+      <h3 className="h3 mb-4">Settings - {sprintData.projectName}</h3>
 
       <div className="card shadow border-0">
         <div className="card-body">

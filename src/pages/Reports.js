@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import CurrentStatus from '../components/CurrentStatus';
 import SprintCompletion from '../components/SprintCompletion';
 import SprintProgress from '../components/SprintProgress';
+import sprintData from '../data/sprintData.json';
 
 function Reports() {
   const sprintStartDate = new Date('2026-02-02T00:00:00+02:00'); // Monday, 2 Feb 2026 SAST
@@ -89,7 +90,7 @@ function Reports() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="text-start">
           <h4 className="mt-2">
-            Reports
+            Reports - {sprintData.projectName}
           </h4>     
         </div>
         <div className="text-end d-flex gap-2">
