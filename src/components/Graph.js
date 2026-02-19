@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import entriesData from '../data/entriesData.json';
 
 function Graph() {
   const [data, setData] = useState([]);
@@ -15,15 +16,25 @@ function Graph() {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setData([
-          { name: 'Mon', value: 12 },
-          { name: 'Tue', value: 19 },
-          { name: 'Wed', value: 15 },
-          { name: 'Thu', value: 25 },
-          { name: 'Fri', value: 22 },
-          { name: 'Sat', value: 30 },
-          { name: 'Sun', value: 28 }
-        ]);
+        
+        // Group entries by date and count completed tasks
+        const last7Days = [];
+        const today = new Date();
+        
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date(today);
+          date.setDate(today.getDate() - i);
+          const dateStr = date.toISOString().split('T')[0];
+          const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+          
+          const completedCount = entriesData.entries.filter(
+            e => e.date === dateStr && e.status === 'Completed'
+          ).length;
+          
+          last7Days.push({ name: dayName, value: completedCount });
+        }
+        
+        setData(last7Days);
         setLoading(false);
       }
     };
@@ -32,7 +43,7 @@ function Graph() {
   }, []);
 
   return (
-    <div className="card mb-4 shadow rounded p-3 gap-3 border-0" style={{ marginRight: '-1%' }}>
+    <div className="card mb-4 shadow-lg rounded p-3 gap-3 border-0" style={{ marginRight: '-1%' }}>
       <h5>Project Progress</h5>
       <div style={{ height: '300px', marginTop: '20px' }}>
         {loading ? (
@@ -40,11 +51,16 @@ function Graph() {
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data}>
+              <defs>
+                <filter id="shadow" height="200%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3"/>
+                </filter>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+              <Line type="monotone" dataKey="value" stroke="#0d6efd" strokeWidth={3} filter="url(#shadow)" />
             </LineChart>
           </ResponsiveContainer>
         )}

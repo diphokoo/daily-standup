@@ -1,8 +1,14 @@
+import entriesData from '../data/entriesData.json';
+
 function EntriesSummary() {
+  const completed = entriesData.entries.filter(e => e.status === 'Completed').length;
+  const toDo = entriesData.entries.filter(e => e.status === 'To Do').length;
+  const blockers = entriesData.entries.filter(e => e.status === 'Blockers').length;
+
   const summary = [
-    { label: 'Completed', value: 42, iconColor: 'text-primary', icon: 'bi bi-check-circle-fill' },
-    { label: 'To Do', value: 12, iconColor: 'text-success', icon: 'bi bi-check-circle-fill' },
-    { label: 'Blockers', value: 5, iconColor: 'text-warning', icon: 'bi-exclamation-triangle-fill' }
+    { label: 'Completed', value: completed, iconColor: 'text-primary', icon: 'bi bi-check-circle-fill' },
+    { label: 'To Do', value: toDo, iconColor: 'text-success', icon: 'bi bi-check-circle-fill' },
+    { label: 'Blockers', value: blockers, iconColor: 'text-warning', icon: 'bi-exclamation-triangle-fill' }
   ];
 
   return (

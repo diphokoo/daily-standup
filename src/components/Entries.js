@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import entriesData from '../data/entriesData.json';
 
 function Entries() {
   const [selectedPeriod, setSelectedPeriod] = useState('');
@@ -21,16 +22,7 @@ function Entries() {
   };
 
   const periods = generatePeriods();
-  const today = new Date();
-  
-  const entries = [
-    { id: 1, date: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Alpha', description: 'Completed API integration', status: 'Completed' },
-    { id: 2, date: new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Beta', description: 'Fixed authentication bug', status: 'Completed' },
-    { id: 3, date: new Date(today.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Alpha', description: 'Updated documentation', status: 'To Do' },
-    { id: 4, date: new Date(today.getTime() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Gamma', description: 'Team meeting and planning', status: 'Blockers' },
-    { id: 5, date: new Date(today.getTime() - 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Beta', description: 'Database optimization', status: 'Completed' },
-    { id: 6, date: new Date(today.getTime() - 35 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Alpha', description: 'UI improvements', status: 'To Do' }
-  ];
+  const entries = entriesData.entries;
 
   const filteredEntries = selectedPeriod
     ? entries.filter(entry => {
