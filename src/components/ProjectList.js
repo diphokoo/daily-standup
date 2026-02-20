@@ -1,42 +1,18 @@
-function ProjectList() {
-  const projects = [
-    {
-      id: 1,
-      name: 'Project Alpha',
-      createdDate: 'Mar 28, 2025',
-      description: 'Developing an analytics and insight dashboard',
-      status: 'In Progress',
-      statusColor: 'bg-primary',
-      daysRemaining: 19,
-      progress: 65
-    },
-    {
-      id: 2,
-      name: 'Project Beta',
-      createdDate: 'Feb 15, 2025',
-      description: 'Building a customer management system',
-      status: 'Completed',
-      statusColor: 'bg-success',
-      daysRemaining: 0,
-      progress: 100
-    },
-    {
-      id: 3,
-      name: 'Project Gamma',
-      createdDate: 'Apr 10, 2025',
-      description: 'Implementing automated testing framework',
-      status: 'Overdue',
-      statusColor: 'bg-danger',
-      daysRemaining: -5,
-      progress: 45
-    }
-  ];
+import sprintData from '../data/sprintData.json';
+
+function ProjectList({ projects, onSelectProject, selectedProjectId }) {
+  const projectList = projects || sprintData.projects;
 
   return (
     <div className="mb-4">
       <div className="d-flex gap-3">
-        {projects.map(project => (
-          <div key={project.id} className="card flex-fill border-0 shadow rounded p-3">
+        {projectList.map(project => (
+          <div 
+            key={project.id} 
+            className={`card flex-fill border-0 shadow rounded p-3 ${selectedProjectId === project.id ? 'border-primary' : ''}`}
+            style={{ cursor: 'pointer', border: selectedProjectId === project.id ? '2px solid #0d6efd' : 'none' }}
+            onClick={() => onSelectProject(project.id)}
+          >
             <h5>{project.name}</h5>
             <span className="text-muted mt-3">
               Created {project.createdDate}
