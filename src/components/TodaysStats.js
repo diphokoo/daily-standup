@@ -62,7 +62,7 @@ function TodaysStats() {
     return { totalCompleted, completedPercentage };
   };
   
-  const { totalCompleted, completedPercentage } = calculateSprintProgress();
+  const { completedPercentage } = calculateSprintProgress();
 
   return (
     <div className="d-flex gap-3 mb-4">
