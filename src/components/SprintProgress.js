@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import sprintData from '../data/sprintData.json';
+import { useFirestoreData } from '../hooks/useFirestoreData';
 
 function SprintProgress({ selectedSprint, sprintDates }) {
+  const { sprints, loading } = useFirestoreData();
   const [data, setData] = useState(null);
   const [dailyDominance, setDailyDominance] = useState([]);
 
   useEffect(() => {
-    const sprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
+    if (loading || !sprints.length) return;
+    const sprint = sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
     
     if (sprint && sprintDates) {
       const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Africa/Johannesburg' }));
@@ -55,7 +57,7 @@ function SprintProgress({ selectedSprint, sprintDates }) {
     } else if (sprint) {
       setData(sprint);
     }
-  }, [selectedSprint, sprintDates]);
+  }, [selectedSprint, sprintDates, sprints, loading]);
 
   if (!data) return null;
 
@@ -69,7 +71,7 @@ function SprintProgress({ selectedSprint, sprintDates }) {
   };
 
   return (
-    <div className="d-flex gap-3 mb-4">
+    <div className="d-flex flex-column flex-md-row gap-3 mb-4">
       <div className="card shadow border-0" style={{ flex: '7' }}>
         <div className="card-header bg-white border-0">
           <h5 className="mb-0">Sprint Progress</h5>

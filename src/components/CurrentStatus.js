@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import sprintData from '../data/sprintData.json';
+import { useFirestoreData } from '../hooks/useFirestoreData';
 
 function CurrentStatus({ selectedSprint, sprintDates }) {
+  const { sprints, loading } = useFirestoreData();
   const [data, setData] = useState(null);
-  const [previousData, setPreviousData] = useState(null);
 
   useEffect(() => {
-    const sprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
-    const prevSprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint) - 1);
+    if (loading || !sprints.length) return;
+    const sprint = sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
     
     if (sprint && sprintDates) {
       const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Africa/Johannesburg' }));
@@ -45,18 +45,15 @@ function CurrentStatus({ selectedSprint, sprintDates }) {
     } else if (sprint) {
       setData(sprint);
     }
-    
-    setPreviousData(prevSprint);
-  }, [selectedSprint, sprintDates]);
+  }, [selectedSprint, sprintDates, sprints, loading]);
 
-  if (!data || !previousData) return null;
+  if (!data) return null;
 
   const cards = [
     {
       header: 'Tasks Completed',
       icon: 'bi-check-circle-fill',
       iconColor: 'text-success',
-      bgColor: 'bg-success',
       value: data.tasksCompleted,
       body: 'In Last Sprint',
       footer: `${data.changeFromPrevious} from previous sprint`
@@ -65,7 +62,6 @@ function CurrentStatus({ selectedSprint, sprintDates }) {
       header: 'Tasks To Do',
       icon: 'bi-check-circle-fill',
       iconColor: 'text-primary',
-      bgColor: 'bg-primary',
       value: data.tasksToDo,
       body: `+${data.newThisSprint} this sprint`,
       footer: `↑ ${data.newThisSprint} this sprint`
@@ -74,7 +70,6 @@ function CurrentStatus({ selectedSprint, sprintDates }) {
       header: 'Blockers',
       icon: 'bi-exclamation-triangle-fill',
       iconColor: 'text-warning',
-      bgColor: 'bg-warning',
       value: data.blockers,
       body: `${data.repeatBlockers} Repeat Blockers`,
       footer: `${data.repeatBlockersChange} Repeated Blockers`
@@ -83,7 +78,6 @@ function CurrentStatus({ selectedSprint, sprintDates }) {
       header: 'More Down Errors',
       icon: 'bi-arrow-down-circle-fill',
       iconColor: 'text-secondary',
-      bgColor: 'bg-secondary',
       value: data.moreDownErrors,
       body: 'From last sprint',
       footer: `${data.completionRate} completion rate`
@@ -92,7 +86,7 @@ function CurrentStatus({ selectedSprint, sprintDates }) {
 
   return (
     <div className="mb-4">
-      <div className="d-flex gap-3">
+      <div className="d-flex flex-column flex-md-row gap-3">
         {cards.map((card, index) => (
           <div key={index} className="card flex-fill shadow border-0">
             <div className="card-header bg-white border-0 d-flex align-items-center gap-2">
