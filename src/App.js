@@ -9,6 +9,7 @@ import Projects from './pages/Projects';
 import DailyEntries from './pages/DailyEntries';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import { ProjectProvider } from './context/ProjectContext';
 import './App.css';
 
 function App() {
@@ -41,7 +42,13 @@ function App() {
     setShowRegister(false);
   };
 
-  if (loading) return null;
+  if (loading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  );
 
   if (showSuccessModal) {
     return (
@@ -84,12 +91,14 @@ function App() {
   };
 
   return (
-    <div className="d-flex">
-      <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
-      <div className="flex-grow-1" style={{ marginLeft: '12rem', height: '100vh', overflowY: 'auto' }}>
-        {renderPage()}
+    <ProjectProvider>
+      <div className="d-flex">
+        <Sidebar currentPage={currentPage} onPageChange={setCurrentPage} />
+        <div className="flex-grow-1 main-content" style={{ height: '100vh', overflowY: 'auto' }}>
+          {renderPage()}
+        </div>
       </div>
-    </div>
+    </ProjectProvider>
   );
 }
 

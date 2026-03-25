@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import sprintData from '../data/sprintData.json';
+import { useFirestoreData } from '../hooks/useFirestoreData';
 
 function SprintCompletion({ selectedSprint, sprintDates }) {
+  const { sprints, loading } = useFirestoreData();
   const [data, setData] = useState(null);
   const [previousData, setPreviousData] = useState(null);
   const [chartData, setChartData] = useState([]);
@@ -10,8 +11,9 @@ function SprintCompletion({ selectedSprint, sprintDates }) {
   const [showBlockers, setShowBlockers] = useState(true);
 
   useEffect(() => {
-    const sprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
-    const prevSprint = sprintData.sprints.find(s => s.sprintNumber === parseInt(selectedSprint) - 1);
+    if (loading || !sprints.length) return;
+    const sprint = sprints.find(s => s.sprintNumber === parseInt(selectedSprint));
+    const prevSprint = sprints.find(s => s.sprintNumber === parseInt(selectedSprint) - 1);
     
     if (sprint && sprintDates) {
       const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Africa/Johannesburg' }));
@@ -51,7 +53,7 @@ function SprintCompletion({ selectedSprint, sprintDates }) {
     }
     
     setPreviousData(prevSprint);
-  }, [selectedSprint, sprintDates]);
+  }, [selectedSprint, sprintDates, sprints, loading]);
 
   if (!data) return null;
 
@@ -63,7 +65,7 @@ function SprintCompletion({ selectedSprint, sprintDates }) {
     : 0;
 
   return (
-    <div className="d-flex gap-3 mb-4">
+    <div className="d-flex flex-column flex-md-row gap-3 mb-4">
       <div className="card shadow border-0" style={{ flex: '7' }}>
         <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center">
           <h5 className="mb-0">Sprint Completion & Blocker Trend</h5>

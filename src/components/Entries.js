@@ -1,8 +1,16 @@
 import { useState } from 'react';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { useFirestoreData } from '../hooks/useFirestoreData';
 
 function Entries() {
+  const { entries, loading } = useFirestoreData();
   const [selectedPeriod, setSelectedPeriod] = useState('');
-  
+  const [editingEntry, setEditingEntry] = useState(null);
+  const [editForm, setEditForm] = useState({ description: '', status: '', project: '' });
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+
   const generatePeriods = () => {
     const periods = [];
     const today = new Date();
@@ -21,16 +29,6 @@ function Entries() {
   };
 
   const periods = generatePeriods();
-  const today = new Date();
-  
-  const entries = [
-    { id: 1, date: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Alpha', description: 'Completed API integration', status: 'Completed' },
-    { id: 2, date: new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Beta', description: 'Fixed authentication bug', status: 'Completed' },
-    { id: 3, date: new Date(today.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Alpha', description: 'Updated documentation', status: 'To Do' },
-    { id: 4, date: new Date(today.getTime() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Gamma', description: 'Team meeting and planning', status: 'Blockers' },
-    { id: 5, date: new Date(today.getTime() - 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Beta', description: 'Database optimization', status: 'Completed' },
-    { id: 6, date: new Date(today.getTime() - 35 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], project: 'Project Alpha', description: 'UI improvements', status: 'To Do' }
-  ];
 
   const filteredEntries = selectedPeriod
     ? entries.filter(entry => {
@@ -40,7 +38,7 @@ function Entries() {
     : entries;
 
   const getStatusBadge = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Completed': return 'bg-success';
       case 'To Do': return 'bg-primary';
       case 'Blockers': return 'bg-danger';
@@ -48,12 +46,48 @@ function Entries() {
     }
   };
 
+  const handleEdit = (entry) => {
+    setEditingEntry(entry);
+    setEditForm({ description: entry.description, status: entry.status, project: entry.project });
+  };
+
+  const handleSave = async () => {
+    const user = auth.currentUser;
+    if (!user || !editingEntry) return;
+    try {
+      setSaving(true);
+      await updateDoc(doc(db, `users/${user.uid}/entries`, editingEntry.docId), {
+        description: editForm.description,
+        status: editForm.status,
+        project: editForm.project
+      });
+      setEditingEntry(null);
+    } catch (error) {
+      console.error('Error updating entry:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (entry) => {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      setDeletingId(entry.docId);
+      await deleteDoc(doc(db, `users/${user.uid}/entries`, entry.docId));
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div className="card p-3 shadow border-0">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5>Entries</h5>
-        <select 
-          className="form-select w-auto" 
+        <select
+          className="form-select w-auto"
           value={selectedPeriod}
           onChange={(e) => setSelectedPeriod(e.target.value)}
         >
@@ -63,24 +97,86 @@ function Entries() {
           ))}
         </select>
       </div>
-      <div>
-        {filteredEntries.map(entry => (
-          <div key={entry.id} className="border-bottom py-3">
-            <div className="d-flex justify-content-between align-items-start">
-              <div className="flex-grow-1">
-                <div className="d-flex gap-4">
+
+      {loading ? (
+        <p className="text-muted">Loading...</p>
+      ) : (
+        <div>
+          {filteredEntries.map(entry => (
+            <div key={entry.id} className="border-bottom py-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex gap-4 flex-grow-1">
                   <small className="text-muted" style={{ minWidth: '100px' }}>{entry.date}</small>
                   <small className="fw-bold" style={{ minWidth: '120px' }}>{entry.project}</small>
                   <small>{entry.description}</small>
                 </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className={`badge ${getStatusBadge(entry.status)}`}>{entry.status}</span>
+                  <i className="bi bi-pencil text-secondary" style={{ cursor: 'pointer' }} onClick={() => handleEdit(entry)}></i>
+                  <i
+                    className="bi bi-trash text-danger"
+                    style={{ cursor: deletingId === entry.docId ? 'not-allowed' : 'pointer' }}
+                    onClick={() => handleDelete(entry)}
+                  >
+                    {deletingId === entry.docId && <span className="spinner-border spinner-border-sm ms-1" role="status"></span>}
+                  </i>
+                </div>
               </div>
-              <span className={`badge ${getStatusBadge(entry.status)}`}>
-                {entry.status}
-              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {editingEntry && (
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setEditingEntry(null)}>
+          <div className="modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Edit Entry</h5>
+                <button type="button" className="btn-close" onClick={() => setEditingEntry(null)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">Description</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editForm.description}
+                    onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Project</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editForm.project}
+                    onChange={(e) => setEditForm(prev => ({ ...prev, project: e.target.value }))}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Status</label>
+                  <select
+                    className="form-select"
+                    value={editForm.status}
+                    onChange={(e) => setEditForm(prev => ({ ...prev, status: e.target.value }))}
+                  >
+                    <option value="Completed">Completed</option>
+                    <option value="To Do">To Do</option>
+                    <option value="Blockers">Blockers</option>
+                  </select>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setEditingEntry(null)} disabled={saving}>Cancel</button>
+                <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
+                  {saving ? <><span className="spinner-border spinner-border-sm me-2" role="status"></span>Saving...</> : 'Save Changes'}
+                </button>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
