@@ -6,7 +6,7 @@ import Entries from '../components/Entries';
 import { useFirestoreData } from '../hooks/useFirestoreData';
 import PageHeader from '../components/PageHeader';
 
-function DailyEntries() {
+function DailyEntries({ onPageChange = () => {} }) {
   const { projects } = useFirestoreData();
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -24,7 +24,9 @@ function DailyEntries() {
       setSaving(true);
       await addDoc(collection(db, `users/${user.uid}/entries`), {
         ...formData,
-        id: Date.now()
+        projectId: projects.find((project) => project.name === formData.project)?.docId || '',
+        id: Date.now(),
+        createdAt: new Date().toISOString()
       });
     } catch (error) {
       console.error('Error saving entry:', error);
@@ -38,13 +40,13 @@ function DailyEntries() {
   return (
     <div className="p-4">
       <PageHeader page="Daily Entries">
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+        <div className="d-flex flex-wrap gap-2"><button className="btn btn-outline-secondary" onClick={() => onPageChange('weekly-planner')}><i className="bi bi-calendar-week me-2"></i>Weekly Planner</button><button className="btn btn-outline-secondary" onClick={() => onPageChange('projects')}><i className="bi bi-folder2 me-2"></i>Projects</button><button className="btn btn-primary" onClick={() => setShowModal(true)}>
           <i className="bi bi-plus-lg me-2"></i>New Entry
-        </button>
+        </button></div>
       </PageHeader>
       <span className="text-muted d-block mb-4">Tracking over 14-day period</span>
       <EntriesSummary />
-      <Entries />
+      <Entries onPageChange={onPageChange} />
 
       {showModal && (
         <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>

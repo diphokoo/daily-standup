@@ -6,7 +6,7 @@ import ProjectTimeline from '../components/ProjectTimeline';
 import { useFirestoreData } from '../hooks/useFirestoreData';
 import PageHeader from '../components/PageHeader';
 
-function Projects() {
+function Projects({ onPageChange = () => {} }) {
   const { projects: filteredProjects, loading, refetch } = useFirestoreData();
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(1);
@@ -53,11 +53,16 @@ function Projects() {
 
   return (
     <div className="p-4">
-      <div className="mb-4 p-2 rounded d-flex justify-content-between align-items-center">
+      <div className="mb-4 p-2 rounded d-flex flex-wrap gap-2 justify-content-between align-items-center">
         <PageHeader page="Projects" />
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+        <div className="d-flex flex-wrap gap-2"><button className="btn btn-outline-secondary" onClick={() => onPageChange('weekly-planner')}><i className="bi bi-calendar-week me-2" />Weekly Planner</button><button className="btn btn-outline-secondary" onClick={() => onPageChange('daily-entries')}><i className="bi bi-journal-text me-2" />Daily Entries</button><button className="btn btn-primary" onClick={() => setShowModal(true)}>
           <i className="bi bi-plus-lg me-2"></i>New Project
-        </button>
+        </button></div>
+      </div>
+
+      <div className="alert alert-light border d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div><strong>How the workspace connects</strong><div className="small text-muted">Create projects here, schedule project work in the Weekly Planner, then log completed work in Daily Entries.</div></div>
+        <div className="d-flex flex-wrap gap-2"><button className="btn btn-sm btn-outline-primary" onClick={() => onPageChange('weekly-planner')}>Plan work</button><button className="btn btn-sm btn-outline-primary" onClick={() => onPageChange('daily-entries')}>Record work</button></div>
       </div>
 
       {loading ? <p className="text-muted">Loading...</p> : (

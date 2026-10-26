@@ -3,7 +3,7 @@ import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { useFirestoreData } from '../hooks/useFirestoreData';
 
-function Entries() {
+function Entries({ onPageChange = () => {} }) {
   const { entries, loading } = useFirestoreData();
   const [selectedPeriod, setSelectedPeriod] = useState('');
   const [editingEntry, setEditingEntry] = useState(null);
@@ -108,7 +108,7 @@ function Entries() {
                 <div className="d-flex gap-4 flex-grow-1">
                   <small className="text-muted" style={{ minWidth: '100px' }}>{entry.date}</small>
                   <small className="fw-bold" style={{ minWidth: '120px' }}>{entry.project}</small>
-                  <small>{entry.description}</small>
+                  <div className="d-flex flex-column"><small>{entry.description}</small>{entry.plannerTaskId && <div className="d-flex flex-wrap align-items-center gap-2 mt-1"><small className="text-success"><i className="bi bi-link-45deg me-1" />Linked to Weekly Planner{entry.plannedHours ? ` · ${entry.plannedHours}h planned` : ''}</small><button type="button" className="btn btn-link btn-sm p-0" onClick={() => onPageChange('weekly-planner')}>View plan</button></div>}</div>
                 </div>
                 <div className="d-flex align-items-center gap-2">
                   <span className={`badge ${getStatusBadge(entry.status)}`}>{entry.status}</span>

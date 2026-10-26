@@ -9,6 +9,7 @@ import Projects from './pages/Projects';
 import DailyEntries from './pages/DailyEntries';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import WeeklyPlanner from './pages/WeeklyPlanner';
 import { ProjectProvider } from './context/ProjectContext';
 import './App.css';
 
@@ -82,8 +83,9 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard': return <Dashboard />;
-      case 'projects': return <Projects />;
-      case 'daily-entries': return <DailyEntries />;
+      case 'projects': return <Projects onPageChange={setCurrentPage} />;
+      case 'daily-entries': return <DailyEntries onPageChange={setCurrentPage} />;
+      case 'weekly-planner': return <WeeklyPlanner onPageChange={setCurrentPage} />;
       case 'reports': return <Reports />;
       case 'settings': return <Settings />;
       default: return <Dashboard />;

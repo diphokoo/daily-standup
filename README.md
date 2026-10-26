@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Daily Standup & Weekly Planner
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application powered by Firebase Authentication and Cloud Firestore for project tracking, daily stand-ups, weekly task planning, and productivity reporting.
 
-## Available Scripts
+## Weekly Planner
 
-In the project directory, you can run:
+The Weekly Planner is integrated into the existing app and uses the signed-in user's Firestore space at `users/{uid}/plannerTasks`. It includes:
 
-### `npm start`
+- Monday-to-Sunday week view with previous/next week navigation and a shortcut back to the current week.
+- Create, edit, and delete planned tasks.
+- Assign tasks to an existing project and date.
+- Set start/end times, planned hours, actual hours, and work location.
+- Track status (`Planned`, `In Progress`, `Completed`, `On Hold`) and completion percentage.
+- Weekly summaries for task completion, planned hours, actual hours, and remaining planned hours.
+- Responsive layout for desktop, tablet, and mobile screens.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Existing project, daily-entry, dashboard, and report screens are retained. The planner stores its tasks in a separate Firestore subcollection, so it does not overwrite existing daily entries or projects.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Run locally
 
-### `npm test`
+1. Install Node.js (LTS recommended).
+2. From the project directory, run `npm install`.
+3. Run `npm start` to start the development server.
+4. Run `npm run build` to create a production build.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The app uses the Firebase project configuration in `src/firebase.js`. Ensure the relevant Firebase Authentication and Cloud Firestore settings and security rules are enabled for your deployment.
 
-### `npm run build`
+## Existing Create React App scripts
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `npm start` — starts the development server.
+- `npm test` — runs the test runner.
+- `npm run build` — creates an optimized production build.
+- `npm run eject` — ejects Create React App configuration (one-way operation).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## How Projects, Weekly Planner, and Daily Entries work together
 
-### `npm run eject`
+The app follows one workflow:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. **Projects** — create and organise the projects you are working on.
+2. **Weekly Planner** — schedule dated tasks, assign them to a project, set times and planned/actual hours, and track status and progress. The planner respects the project filter in the sidebar.
+3. **Daily Entries** — when you have worked on a planned task, select **Log work to Daily Entries** on that planner task. The app creates a daily entry with the task date, project, description, status, and planned/actual hours, then records the link back to the planner task to prevent logging it again.
+4. Use the navigation buttons on each page to move between the three parts of the workflow. Daily entries created from planner tasks show a link back to the Weekly Planner.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Planner tasks are stored in `users/{uid}/plannerTasks`; projects and daily entries continue to use `users/{uid}/projects` and `users/{uid}/entries`. The new links store the associated project document ID and planner task ID where available. Ensure your Firestore rules allow a signed-in user to read and write only their own subcollections.

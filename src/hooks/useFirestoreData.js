@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../firebase';
 import { useProject } from '../context/ProjectContext';
 
@@ -18,7 +19,7 @@ export function useFirestoreData() {
   useEffect(() => {
     let unsubscribers = [];
 
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       unsubscribers.forEach(u => u());
       unsubscribers = [];
 

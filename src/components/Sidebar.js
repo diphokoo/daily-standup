@@ -11,6 +11,7 @@ function Sidebar({ currentPage, onPageChange }) {
     { id: 'dashboard', label: 'Dashboard', icon: 'bi-speedometer2', mobileOnly: true },
     { id: 'projects', label: 'Projects', icon: 'bi-folder', mobileOnly: true },
     { id: 'daily-entries', label: 'Daily Entries', icon: 'bi-journal-text', mobileOnly: true },
+    { id: 'weekly-planner', label: 'Weekly Planner', icon: 'bi-calendar-week', mobileOnly: true },
     { id: 'reports', label: 'Reports', icon: 'bi-bar-chart', mobileOnly: false },
     { id: 'settings', label: 'Settings', icon: 'bi-gear', mobileOnly: true }
   ];

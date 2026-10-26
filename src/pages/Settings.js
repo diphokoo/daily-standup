@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { useFirestoreData } from '../hooks/useFirestoreData';
 import PageHeader from '../components/PageHeader';
@@ -14,7 +15,7 @@ function Settings() {
   });
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setSettings((prev) => ({
           ...prev,
